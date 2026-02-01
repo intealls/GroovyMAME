@@ -772,15 +772,8 @@ sound_manager::sound_manager(running_machine &machine) :
 	machine.save().save_item(NAME(m_last_sync_time));
 
 	// start the periodic update flushing timer
-	m_update_timer = machine.scheduler().timer_alloc(timer_expired_delegate(FUNC(sound_manager::update), this));
-	screen_device_enumerator iter(machine.root_device());
-	if (iter.first() == nullptr) {
-		// screenless
-		m_update_timer->adjust(STREAMS_UPDATE_ATTOTIME, 0, STREAMS_UPDATE_ATTOTIME);
-	} else {
-		attotime update_period = iter.first()->frame_period();
-		m_update_timer->adjust(update_period, 0, update_period);
-	}
+	// m_update_timer = machine.scheduler().timer_alloc(timer_expired_delegate(FUNC(sound_manager::update), this));
+	// m_update_timer->adjust(STREAMS_UPDATE_ATTOTIME, 0, STREAMS_UPDATE_ATTOTIME);
 
 	// mark the generation as "just starting, waiting for config loading"
 	m_osd_info.m_generation = 0xffff0000;
@@ -1143,19 +1136,19 @@ void sound_manager::run_effects()
 				size_t output_frames;
 
 				double rate = 1000.0 / machine().video().speed_factor();
-				double sink_rate = machine().sync().get_sink_rate(stream.m_id) / stream.m_rate;
+				double sink_rate = machine().sync().get_sink_rate(stream.m_id);
 
-				if (machine().sync().handle_throttle() && machine().options().sync_audio())
+				if (machine().sync().handle_throttle() && machine().options().sync_audio()) {
 					rate = 1.0 / machine().sync().speed_factor();
+					rate *= sink_rate == 0.0 ? 1.0 : sink_rate / stream.m_rate;
 
-				rate *= sink_rate == 0.0 ? 1.0 : sink_rate;
+					machine().sync().log("Final audio rate [median(-0.0003:0.0003)]", machine().sync().NOW, rate);
+					machine().sync().log("Stream sink rate", machine().sync().NOW, sink_rate == 0.0 ? stream.m_rate : sink_rate);
+				}
 
 				stream.m_output_resampler.apply(rate, stream.m_buffer.data(), stream.m_samples, stream.m_output_buffer.data(), &output_frames, stream.m_channels);
 
 				machine().osd().sound_stream_sink_update(stream.m_id, stream.m_output_buffer.data(), output_frames);
-
-				machine().sync().log("Final audio rate [median(-0.0003:0.0003)]", machine().sync().NOW, rate);
-				machine().sync().log("Stream sink rate", machine().sync().NOW, (sink_rate == 0.0 ? 1.0 : sink_rate) * stream.m_rate);
 			}
 
 		machine().osd().sound_end_update();
@@ -2676,7 +2669,6 @@ void sound_manager::update(s32)
 	streams_update();
 
 	m_last_sync_time = machine().time();
-	m_update_timer->adjust(attotime::from_nsec(machine().sync().emu_period()));
 }
 
 void sound_manager::streams_update()
