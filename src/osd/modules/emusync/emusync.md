@@ -5,7 +5,7 @@
 
 ## Introduction and Acknowledgements
 
-We are introducing _emusync_, a new synchronization system for GroovyMAME, coded by **intealls** and **Calamity** —with intealls taking care of most technical aspects, to be completely fair—. Its purpose is to achieve ultra-low latency audio and video synchronization.
+We are introducing _emusync_, a new synchronization system for GroovyMAME, coded by **Calamity** and **intealls** whose purpose is to achieve ultra-low latency audio and video synchronization. The goal of _emusync_ is for an emulated system to be very difficult (or impossible) to discern from a real system, latency wise.
 
 Addressing input latency is an elusive matter for software developers, because latency cannot be measured through software methods. This has contributed to it remaining as a poorly understood phenomenon.
 
@@ -93,7 +93,7 @@ Emusync brings together a bunch of techniques, namely:
 - Automatic frame delay
 - Video refresh rate estimation
 - Audio sink rate estimation
-- Adaptative audio resampling
+- Adaptive audio resampling
 - Real-time event logging
 - Serial port real-world event debugging
 
