@@ -223,10 +223,28 @@ ___
 
 **-audio_latency** _<milliseconds\>_
 
-Specify the desired output latency (in milliseconds). `-audio_latency 0` sets the operating system default.
+Control desired output latency (in milliseconds).
 
-To manually set desired latency, try `-audio latency 4`, and if audio crackles, increase to `8` or `16`.
+`-audio_latency 0` sets the default for whatever API is used.
+
+For PART, `-audio_latency N` specifies the desired device output latency, with `N` in milliseconds. Buffering latency is fixed at ~2 ms.
+
+For all other APIs `-audio_latency N` controls the buffering latency, with `N` in milliseconds. See the table below for expected outcomes.
+
+| Audio backend | Typical device output latency | Total latency with `-audio_latency N` |
+|---|---|---|
+| PART (`-sound part`) | `N` ms | 2 + `N` ms |
+| PipeWire (Linux)¹ | 1.33 ms | 1.33 + `N` ms |
+| WASAPI / SDL / XAudio2 (Windows) | Unknown (platform-dependent) | Unknown + `N` ms |
+
+> ¹ PipeWire base latency assumes `PIPEWIRE_LATENCY=64/48000` is set.
+
+To manually set desired latency, try `-audio_latency 4`, and if audio crackles, increase to `8` or `16`.
 
 Example:
 
 `mame sf2 -sound part -audio_latency 4`
+
+Example (PipeWire):
+
+`PIPEWIRE_LATENCY=64/48000 mame sf2 -sound pipewire -audio_latency 4`
