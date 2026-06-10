@@ -33,6 +33,7 @@ public:
 		BEFORE_BLIT,
 		AFTER_BLIT,
 		POLL_INPUT,
+		AUDIO_UPDATE,
 		TIMESTAMP_ITEMS
 	};
 
@@ -43,6 +44,7 @@ public:
 		{ BEFORE_BLIT,     "BEFORE_BLIT"  },
 		{ AFTER_BLIT,      "AFTER_BLIT"   },
 		{ POLL_INPUT,      "POLL_INPUT"   },
+		{ AUDIO_UPDATE,    "AUDIO_UPDATE" },
 	};
 
 	enum serial_command

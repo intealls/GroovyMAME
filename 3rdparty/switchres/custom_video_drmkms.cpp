@@ -555,7 +555,7 @@ bool drmkms_timing::init()
 			drm_name = devices[num]->nodes[DRM_NODE_PRIMARY];
 		else continue;
 
-		if (!access(drm_name, F_OK) == 0)
+		if (!(access(drm_name, F_OK) == 0))
 		{
 			log_error("DRM/KMS: <%d> (init) [ERROR] cannot open device %s\n", m_id, drm_name);
 			break;
@@ -756,7 +756,7 @@ int drmkms_timing::get_master_fd()
 		return -1;
 	}
 
-	if (!access(m_drm_name, F_OK) == 0)
+	if (!(access(m_drm_name, F_OK) == 0))
 	{
 		log_error("DRM/KMS: <%d> (%s) [ERROR] Device %s doesn't exist\n", m_id, __FUNCTION__, m_drm_name);
 		return -1;

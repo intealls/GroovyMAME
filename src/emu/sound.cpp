@@ -1131,6 +1131,7 @@ void sound_manager::run_effects()
 		if (machine().sync().handle_throttle() && machine().options().sync_audio())
 			machine().sync().wait_until_time(throttle_target, 20 * 1e6);
 
+		machine().sync().serial_write(machine().sync().AUDIO_UPDATE);
 		machine().osd().sound_begin_update();
 
 		// Resample streams and send to osd
