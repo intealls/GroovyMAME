@@ -18,6 +18,7 @@
 #include "kalman.h"
 
 #include <map>
+#include <mutex>
 
 class emusync
 {
@@ -118,7 +119,8 @@ public:
 
 	enum log_type
 	{
-		NOW
+		NOW,
+		MIN
 	};
 
 	void log(std::string tag, log_type type, double value);
@@ -236,6 +238,7 @@ private:
 	};
 
 	sink_slot m_sink_slots[MAX_SINKS];
+	std::mutex m_sink_reg_mutex;
 
 	struct log_out_item
 	{
@@ -261,6 +264,9 @@ private:
 			else
 				switch(m_type)
 				{
+				case MIN:
+					m_item.m_value = value < m_item.m_value ? value : m_item.m_value;
+					break;
 				case NOW:
 				default:
 					m_item.m_value = value;
