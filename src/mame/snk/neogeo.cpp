@@ -11530,6 +11530,21 @@ ROM_START( lasthope )
 	ROM_LOAD16_BYTE( "ngdt-300-c4.bin", 0x800001, 0x400000, CRC(8486ad9e) SHA1(19a2a73c825687e0cb9fd62bde00db91b5409529)) /* Plane 2,3 */
 ROM_END
 
+ROM_START( 240png100 )
+	ROM_REGION( 0x100000, "cslot1:maincpu", ROMREGION_BE|ROMREGION_16BIT )
+	ROM_LOAD16_WORD_SWAP( "2501-p1.p1", 0x000000, 0x100000, CRC(69196380) SHA1(2fb81767ee78eff58cdbe0513ceb3d0b2fdb75f9) )
+
+	NEO_SFIX_128K( "2501-s1.s1", CRC(5023f1ee) SHA1(7bbf9fa1a93daf1d4e3a28b0bc12d228efbdea36) )
+
+	NEO_BIOS_AUDIO_64K( "2501-m1.m1", CRC(25058131) SHA1(705241b9c1a6b1d3b031e863910bd70263637857) )
+
+	ROM_REGION( 0x800000, "cslot1:ymsnd:adpcma", 0 )
+	ROM_LOAD( "2501-v1.v1", 0x000000, 0x80000, CRC(74730639) SHA1(27a59eaf5ea9b50d0c028b44dc680bf6d6a59a95) )
+
+	ROM_REGION( 0x1000000, "cslot1:sprites", 0 )
+	ROM_LOAD16_BYTE( "2501-c1.c1", 0x000000, 0x100000, CRC(1df22c5b) SHA1(e85b7b86fb3d5f50093eb5959f3c53af4da1672b) )
+	ROM_LOAD16_BYTE( "2501-c2.c2", 0x000001, 0x100000, CRC(68fbb87d) SHA1(bd22f074f2b8184d98ebe0612999ad146ae6808d) )
+ROM_END
 
 /*************************************
  *
@@ -12254,3 +12269,6 @@ GAME( 2005, lasthope,   neogeo,   neobase,   neogeo,    mvs_led_state, empty_ini
 
 // NEOBITZ
 // Knight's Chance (c)2014 - MVS/AES
+
+// 240p Test Suite 1.00
+GAME( 2023, 240png100,   neogeo,   neobase,   neogeo,    mvs_led_state, empty_init, ROT0, "Artemio Urbina", "240p Test Suite 1.00", MACHINE_SUPPORTS_SAVE )
